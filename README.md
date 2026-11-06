@@ -10,7 +10,7 @@ A launch page for a handheld made for indie games. Concept project, 2026. Design
 
 ## The brief
 
-I gave myself a brief: build a product launch page with the craft and pacing of a top-tier hardware launch, for a fictional 7-inch OLED handheld. Rules I set: one self-contained HTML file, no photos or stock renders, and every visual made in code (three.js, canvas, SVG, CSS). It also had to work on a 390px phone, with a keyboard, and with reduced motion turned on.
+I gave myself a brief: build a product launch page with the craft and pacing of a top-tier hardware launch, for a fictional 7-inch OLED handheld. Rules I set: no photos or stock renders, no 3D model files, and every visual made in code (three.js, canvas, SVG, CSS). It also had to work on a 390px phone, with a keyboard, and with reduced motion turned on.
 
 ## The idea
 
@@ -30,7 +30,7 @@ Also: a 3D finishes picker (drag or arrow keys, three colorways) and a reserve f
 
 ## How it's built
 
-- **One HTML file**, about 115 KB. No images, no 3D model files.
+- **No build step and no assets.** About 115 KB of HTML, CSS and JavaScript. No images, no 3D model files.
 - **three.js** for the device: extruded curves, physical materials, a procedural studio environment, rim lighting and a contact shadow. The screen is a canvas texture showing the shelf.
 - **GSAP + ScrollTrigger** pin the teardown and turn scroll into a 0–1 progress value. **Lenis** smooths the scroll on desktop.
 - **Canvas 2D and SVG** for the mini-game, diagrams and the SVG fallback when WebGL isn't available.
@@ -39,6 +39,24 @@ Also: a 3D finishes picker (drag or arrow keys, three colorways) and a reserve f
 ### Testing the teardown
 
 A script steps the explode value in 1,000 increments and checks every part's bounding box against every part in other layers. It fails if one part moves into another. A second check projects each part to the screen at 1440×900 and 390×844 and fails if two parts overlap or a callout leaves the viewport. Both pass with zero problems.
+
+## Project structure
+
+```
+index.html          page markup
+css/styles.css      all styles
+js/core.js          shared helpers and state
+js/scroll.js        smooth scroll, section metrics, nav, teardown captions
+js/motion.js        GSAP text reveals, detail reel, live panels
+js/finishes.js      colorway picker and 3D viewer controls
+js/library.js       game shelf filters
+js/form.js          reserve form validation
+js/device.js        three.js device, teardown poses, callouts, render loop
+js/game.js          Wickfire Dash mini-game
+js/main.js          pointer tilt, frame ticker, three.js boot
+```
+
+Plain scripts loaded in order, no bundler. The live version on victorvk.com is the same code inlined into one file.
 
 ## Accessibility and performance
 
@@ -50,7 +68,7 @@ A script steps the explode value in 1,000 increments and checks every part's bou
 
 ## Run it
 
-No build step. Open `index.html` in a browser, or serve the folder:
+No build step. Serve the folder and open it in a browser:
 
 ```bash
 python3 -m http.server 8000   # open http://localhost:8000
